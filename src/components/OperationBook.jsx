@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react'
-import { FaFileCircleXmark, FaFilePen } from "react-icons/fa6";
+
+import Data from './Data';
 
 
 //for save data in localstorage after any refresh
@@ -38,6 +39,14 @@ function OperationBook() {
         localStorage.setItem('book', JSON.stringify(books))
     }, [books])
 
+
+    const deleteBook = (number) => {
+        const filterBook=books.filter((element)=>{
+            return element.number!==number
+        })
+        setBooks(filterBook)
+    }
+
     return (
         <>
             <div className='justify-between flex mx-32 py-10'>
@@ -64,21 +73,12 @@ function OperationBook() {
                                             <th className='w-48 '>Author</th>
                                             <th className='w-20 '>Op</th>
                                         </tr>
-                                        <tr className='h-10'>
-                                            <td className='text-center border border-orange-400'>1</td>
-                                            <td className='text-center border border-orange-400'>Green Moon</td>
-                                            <td className='text-center border border-orange-400'>Jaber Saraj</td>
-                                            <td className='text-center border border-orange-400'>
-                                                <div className='flex justify-around'>
-                                                    <FaFileCircleXmark color='red' className='mt-1 cursor-pointer' />
-                                                    <FaFilePen color='green' className='mt-1 cursor-pointer' />
-                                                </div>
-                                            </td>
-                                        </tr>
+
+                                        <Data books={books} deleteBook={deleteBook}  />
                                     </table>
                                 </div>
                                 <div className='flex justify-center p-2 pt-4'>
-                                    <button className='bg-orange-400 p-2 rounded-sm w-full'>Remove All</button>
+                                    <button className='bg-orange-400 p-2 rounded-sm w-full' onClick={() => setBooks([])}>Remove All</button>
                                 </div>
                             </>
 
