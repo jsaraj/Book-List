@@ -1,60 +1,92 @@
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaFileCircleXmark, FaFilePen } from "react-icons/fa6";
 
 
+//for save data in localstorage after any refresh
+const GetDataFromLs = () => {
+    const data = localStorage.getItem('book');
+    if (data) {
+        return JSON.parse(data);
+    } else {
+        return [];
+    }
+}
+
 function OperationBook() {
+
+    const [books, setBooks] = useState(GetDataFromLs);
+    const [title, setTitle] = useState();
+    const [author, setAuthor] = useState();
+    const [number, setNumber] = useState();
+
+
+    const submitHandler = (e) => {
+        e.preventDefault();
+
+        let book = {
+            title,
+            author,
+            number
+        }
+
+        setBooks([...books, book]);
+
+    }
+
+    useEffect(() => {
+        localStorage.setItem('book', JSON.stringify(books))
+    }, [books])
+
     return (
         <>
             <div className='justify-between flex mx-32 py-10'>
-                <div className='bg-gray-300 w-5/12 rounded-md'>
-                    <form className='p-3'>
+                <div className='bg-gray-300 w-5/12 rounded-md h-80'>
+                    <form className='p-3' onSubmit={submitHandler}>
                         <label className='flex w-full'>Title:</label>
-                        <input type='text' name='title' className='flex w-full mb-4 p-1 rounded-sm'></input>
+                        <input type='text' name='title' required onChange={(e) => { setTitle(e.target.value) }} className='flex w-full mb-4 p-1 rounded-sm'></input>
                         <label className='flex w-full'>Author:</label>
-                        <input type='text' name='author' className='flex w-full mb-4 p-1 rounded-sm' ></input>
+                        <input type='text' name='author' required onChange={(e) => { setAuthor(e.target.value) }} className='flex w-full mb-4 p-1 rounded-sm' ></input>
                         <label className='flex w-full'>Number:</label>
-                        <input type='text' name='number' className='flex w-full mb-8 p-1 rounded-sm'></input>
-                        <input type='submit' value='Add' className='flex w-full bg-orange-400 p-2 rounded-sm'></input>
+                        <input type='text' name='number' required onChange={(e) => { setNumber(e.target.value) }} className='flex w-full mb-8 p-1 rounded-sm'></input>
+                        <input type='submit' value='Add' className='flex w-full bg-orange-400 p-2 rounded-sm cursor-pointer'></input>
                     </form>
                 </div>
-                <div className='bg-gray-300 w-5/12 rounded-md flex'>
-                    <div className='border-r border-orange-400 w-1/12'>
-                        <label className='flex justify-center font-bold'>No.</label>
-                        <p className='border-t border-orange-400 flex justify-center mt-1'>1</p>
-                        <p className='border-t border-orange-400 flex justify-center mt-1'>2</p>
-                        <p className='border-t border-orange-400 flex justify-center mt-1'>2</p>
+                <div className='bg-gray-300 w-5/12 rounded-md h-96'>
+                    {
+                        books.length > 0
+                            ? <>
+                                <div className='flex overflow-y-scroll h-80 p-1'>
+                                    <table className='w-full h-10'>
+                                        <tr className='h-6 border border-orange-400 bg-orange-400'>
+                                            <th className='w-6 '>No.</th>
+                                            <th className='w-52 '>Title</th>
+                                            <th className='w-48 '>Author</th>
+                                            <th className='w-20 '>Op</th>
+                                        </tr>
+                                        <tr className='h-10'>
+                                            <td className='text-center border border-orange-400'>1</td>
+                                            <td className='text-center border border-orange-400'>Green Moon</td>
+                                            <td className='text-center border border-orange-400'>Jaber Saraj</td>
+                                            <td className='text-center border border-orange-400'>
+                                                <div className='flex justify-around'>
+                                                    <FaFileCircleXmark color='red' className='mt-1 cursor-pointer' />
+                                                    <FaFilePen color='green' className='mt-1 cursor-pointer' />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div className='flex justify-center p-2 pt-4'>
+                                    <button className='bg-orange-400 p-2 rounded-sm w-full'>Remove All</button>
+                                </div>
+                            </>
 
-                    </div>
-                    <div className='border-r border-orange-400 w-5/12'>
-                        <label className='flex justify-center font-bold'>Title</label>
-                        <p className='border-t border-orange-400 flex justify-center mt-1'>First Moon</p>
-                        <p className='border-t border-orange-400 flex justify-center mt-1'>Jonathan</p>
-                        <p className='border-t border-orange-400 flex justify-center mt-1'>Jonathan</p>
-                    </div>
-                    <div className=' w-4/12 border-r border-orange-400'>
-                        <label className='flex justify-center font-bold'>Author</label>
-                        <p className='border-t border-orange-400 flex justify-center mt-1'>Jaber saraj</p>
-                        <p className='border-t border-orange-400 flex justify-center mt-1'>Akbar Bakhshi</p>
-                        <p className='border-t border-orange-400 flex justify-center mt-1'>Akbar Bakhshi</p>
-                    </div>
-                    <div className=' w-2/12'>
-                        <label className='flex justify-center font-bold'>Op</label>
-                        <div className='flex justify-around mt-1 pt-1 border-t border-orange-400 '>
-                            <FaFileCircleXmark className='mt-1 cursor-pointer' />
-                            <FaFilePen className='mt-1 cursor-pointer' />
-                        </div>
-                        <div className='flex justify-around mt-1 pt-1 border-t border-orange-400 '>
-                            <FaFileCircleXmark className='mt-1 cursor-pointer' />
-                            <FaFilePen className='mt-1 cursor-pointer' />
-                        </div>
-                        <div className='flex justify-around mt-1 pt-1 border-t border-orange-400 '>
-                            <FaFileCircleXmark className='mt-1 cursor-pointer' />
-                            <FaFilePen className='mt-1 cursor-pointer' />
-                        </div>
+                            : <div className='flex justify-center pt-20'>No Books Added</div>
+                    }
 
-                    </div>
                 </div>
+
             </div>
         </>
     )
