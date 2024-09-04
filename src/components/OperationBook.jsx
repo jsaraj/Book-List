@@ -32,6 +32,9 @@ function OperationBook() {
         }
 
         setBooks([...books, book]);
+        setTitle('');
+        setAuthor('');
+        setNumber('');
 
     }
 
@@ -47,17 +50,19 @@ function OperationBook() {
         setBooks(filterBook)
     }
 
+   
+
     return (
         <>
             <div className='justify-between flex mx-32 py-10'>
                 <div className='bg-gray-300 w-5/12 rounded-md h-80'>
                     <form className='p-3' onSubmit={submitHandler}>
                         <label className='flex w-full'>Title:</label>
-                        <input type='text' name='title' required onChange={(e) => { setTitle(e.target.value) }} className='flex w-full mb-4 p-1 rounded-sm'></input>
+                        <input type='text' value={title} name='title' required onChange={(e) => { setTitle(e.target.value) }} className='flex w-full mb-4 p-1 rounded-sm'></input>
                         <label className='flex w-full'>Author:</label>
-                        <input type='text' name='author' required onChange={(e) => { setAuthor(e.target.value) }} className='flex w-full mb-4 p-1 rounded-sm' ></input>
+                        <input type='text' value={author} name='author' required onChange={(e) => { setAuthor(e.target.value) }} className='flex w-full mb-4 p-1 rounded-sm' ></input>
                         <label className='flex w-full'>Number:</label>
-                        <input type='text' name='number' required onChange={(e) => { setNumber(e.target.value) }} className='flex w-full mb-8 p-1 rounded-sm'></input>
+                        <input type='text' value={number} name='number' required onChange={(e) => { setNumber(e.target.value) }} className='flex w-full mb-8 p-1 rounded-sm'></input>
                         <input type='submit' value='Add' className='flex w-full bg-orange-400 p-2 rounded-sm cursor-pointer'></input>
                     </form>
                 </div>
